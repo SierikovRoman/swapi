@@ -1,0 +1,18 @@
+<div class="dashboard">
+    <div class="filter-wrapper">
+        <div>
+            <label for="character">character:</label>
+            <input type="text" name="character" #character>
+        </div>
+        <div class="filter">
+            <label for="specieType">Specie:</label>
+            <select 
+                name="specieType" 
+                #specieType
+                (change)="onSpecie(specieType.value)">
+                <option *ngFor="let specie of specieList" [value]="specie.name">{{ specie?.name }}</option>
+            </select>
+        </div>
+    </div>
+    <a *ngFor="let character of characterList; let i = index" [routerLink]="['../characters/', i+1 ]" class="character">{{ character?.name }}</a>
+</div>

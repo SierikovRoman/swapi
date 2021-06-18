@@ -1,0 +1,26 @@
+<div class="card" *ngIf="character">
+    <p class="title">
+        <b>Name: </b>
+        {{ character?.name }}
+    </p>
+    <p class="title">
+        <b>Species:</b>
+        <span *ngFor="let film of character?.species; let i = index">
+            {{ mapCharacterData(i, 'specie') }}
+        </span>
+    </p>
+    <hr>
+    <p class="title">
+        <b>Movies:</b>
+        <span *ngFor="let film of character?.films; let i = index">
+            {{ mapCharacterData(i, 'film') }}
+        </span>
+    </p>
+    <hr>
+    <p class="title">
+        <b>Spaceships:</b>
+        <span *ngFor="let starship of character?.starships; let i = index">
+            {{ mapCharacterData(i, 'spaceship') }}
+        </span>
+    </p>
+</div>

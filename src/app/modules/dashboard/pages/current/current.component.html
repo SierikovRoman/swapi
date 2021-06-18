@@ -1,0 +1,8 @@
+<div class="current-item">
+    <div class="current-item__navigation">
+        <button class="current-item__button" (click)="goBack()">Back</button>
+    </div>
+    <div *ngIf="character" class="character-wrapper">
+        <app-character [character]="character"></app-character>
+    </div>
+</div>

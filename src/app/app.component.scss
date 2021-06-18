@@ -1,0 +1,13 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    align-items: center;
+}
