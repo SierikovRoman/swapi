@@ -1,8 +1,19 @@
 <div class="dashboard">
     <div class="filter-wrapper">
-        <div>
-            <label for="character">character:</label>
+        <div class="filter">
+            <label for="character">Caracter:</label>
             <input type="text" name="character" #character>
+        </div>
+        <div class="filter">
+            <label for="movie">Movie:</label>
+            <select 
+                name="movie" 
+                #movie>
+                <option value="start-war">start-war</option>
+                <option value="start-war-1">start-war-1</option>
+                <option value="start-war-2">start-war-2</option>
+                <!-- <option *ngFor="let movie of movieList" [value]="movie.title">{{ movie?.title }}</option> -->
+            </select>
         </div>
         <div class="filter">
             <label for="specieType">Specie:</label>

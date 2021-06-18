@@ -31,6 +31,9 @@ export class StarWarsService {
 
   public getCharacterList(filter?: string): Observable<Response<Character>> {
     let url = `${environment.basePath}people/`;
+    if(filter !== undefined) {
+      url = `${environment.basePath}people/?search=${filter}`;
+    }
     return this.http.get<Response<Character>>(url);
   };
 
@@ -39,8 +42,11 @@ export class StarWarsService {
     return this.http.get<Character>(url);
   };
 
-  public getMovieList(): Observable<Response<Movie>> {
+  public getMovieList(filter?: string): Observable<Response<Movie>> {
     let url = `${environment.basePath}films/`;
+    if(filter !== undefined) {
+      url = `${environment.basePath}films/?search=${filter}`;
+    }
     return this.http.get<Response<Movie>>(url);
   };
 
@@ -52,7 +58,7 @@ export class StarWarsService {
   public getSpeciesList(filter?: string): Observable<Response<Specie>> {
     let url = `${environment.basePath}species/`;
     if(filter !== undefined) {
-      `${environment.basePath}species/?search=${filter}`;
+      url = `${environment.basePath}species/?search=${filter}`;
     }
     return this.http.get<Response<Specie>>(url);
   };

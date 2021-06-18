@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy, Input, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ElementRef, ViewChild } from '@angular/core';
 import { Subject, fromEvent } from 'rxjs';
-import { takeUntil, debounce, map, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { takeUntil, map, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { Specie } from 'src/app/models/Species.interface';
 import { Response } from 'src/app/models/Response.interface';
 import { Character } from 'src/app/models/Character.interface';
+import { Movie } from 'src/app/models/Movie.interface';
 
 import { StarWarsService } from '../../../../services/star-wars.service';
 
@@ -16,8 +17,16 @@ import { StarWarsService } from '../../../../services/star-wars.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
 
-  @Input('character') public character: ElementRef|null = null;
+  @ViewChild('character')
+  public character!: ElementRef;
 
+  @ViewChild('movie')
+  public movie!: ElementRef;
+
+  @ViewChild('specie')
+  public specie!: ElementRef;
+
+  public movieList: Array<Movie> = [];
   public specieList: Array<Specie> = [];
 
   public characterList: Array<Character> = [];
@@ -41,19 +50,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.specieList = state.species;
       }
     });
-
-    fromEvent((this.character as ElementRef).nativeElement, 'input')
-    .pipe(
-      map((event: any) => event.taret.value),
-      debounceTime(500),
-      distinctUntilChanged(),
-      takeUntil(this.lifeTimeObject)
-    )
-    .subscribe(
-      (res: any) => {
-
-      }
-    );
   };
 
   public onSpecie(specie: string) {
@@ -67,6 +63,61 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     )
   };
+
+  ngAfterViewInit() {
+    // search by name
+    fromEvent<any>(this.character.nativeElement, 'keyup')
+    .pipe(
+      map(event => event.target.value),
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(query => this.starWarService.getCharacterList(query)),
+      takeUntil(this.lifeTimeObject)
+    )
+    .subscribe(
+      (res: Response<Character>) => {
+        this.characterList = res.results;
+      }
+    );
+
+    // search by movie
+    fromEvent<any>(this.movie.nativeElement, 'change')
+    .pipe(
+      map(event => event.target.value),
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(query => this.starWarService.getMovieList(query)),
+      takeUntil(this.lifeTimeObject)
+    )
+    .subscribe(
+      (res: Response<Movie>) => {
+        let characters: Array<string> = [];
+        (res.results as Array<Movie>)
+        .forEach((m: Movie, index: number) => {
+          let character = m.characters[index].replace(/http:\/\/swapi.dev\/api\/films\//g,'').replace('/', '');
+          characters.push(character);
+        });
+        if (!!characters.length) {
+          //TODO update characterList
+        }
+      }
+    );
+
+    // search by specie
+    fromEvent<any>(this.specie.nativeElement, 'change')
+    .pipe(
+      map(event => event.target.value),
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(query => this.starWarService.getSpeciesList(query)),
+      takeUntil(this.lifeTimeObject)
+    )
+    .subscribe(
+      (res: Response<Specie>) => {
+        //TODO update characterList
+      }
+    );
+  }
 
   ngOnInit(): void {
   };
