@@ -9,18 +9,16 @@
             <select 
                 name="movie" 
                 #movie>
-                <option value="start-war">start-war</option>
-                <option value="start-war-1">start-war-1</option>
-                <option value="start-war-2">start-war-2</option>
-                <!-- <option *ngFor="let movie of movieList" [value]="movie.title">{{ movie?.title }}</option> -->
+                <option value="null" selected>-- Choose movie --</option>
+                <option *ngFor="let movie of movieList" [value]="movie.title">{{ movie?.title }}</option>
             </select>
         </div>
         <div class="filter">
-            <label for="specieType">Specie:</label>
+            <label for="specie">Specie:</label>
             <select 
-                name="specieType" 
-                #specieType
-                (change)="onSpecie(specieType.value)">
+                name="specie" 
+                #specie>
+                <option value="null" selected>-- Choose specie --</option>
                 <option *ngFor="let specie of specieList" [value]="specie.name">{{ specie?.name }}</option>
             </select>
         </div>

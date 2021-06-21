@@ -1,9 +1,10 @@
 import { SpeciesActionTypes } from '../actions/species.actions';
+import { Specie } from 'src/app/models/Species.interface';
 
 export const speciesFeatureKey = 'species';
 
 export interface State {
-    species: Array<any> | [];
+    species: Array<Specie> | [];
     isLoaded: boolean;
 }
 

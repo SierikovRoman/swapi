@@ -29,10 +29,13 @@ export class StarWarsService {
     private http: HttpClient
   ) { }
 
-  public getCharacterList(filter?: string): Observable<Response<Character>> {
+  public getCharacterList(filter?: string, page?: number): Observable<Response<Character>> {
     let url = `${environment.basePath}people/`;
     if(filter !== undefined) {
       url = `${environment.basePath}people/?search=${filter}`;
+    }
+    if (page !== undefined) {
+      url = `${environment.basePath}people/?page=${page}`;
     }
     return this.http.get<Response<Character>>(url);
   };
@@ -50,15 +53,21 @@ export class StarWarsService {
     return this.http.get<Response<Movie>>(url);
   };
 
-  public getSpaceshipList(): Observable<Response<Spaceship>> {
+  public getSpaceshipList(filter?: string, page?: number): Observable<Response<Spaceship>> {
     let url = `${environment.basePath}starships/`;
+    if (page !== undefined) {
+      url = `${environment.basePath}starships/?page=${page}`;
+    }
     return this.http.get<Response<Spaceship>>(url);
   };
 
-  public getSpeciesList(filter?: string): Observable<Response<Specie>> {
+  public getSpeciesList(filter?: string, page?: number): Observable<Response<Specie>> {
     let url = `${environment.basePath}species/`;
     if(filter !== undefined) {
       url = `${environment.basePath}species/?search=${filter}`;
+    }
+    if (page !== undefined) {
+      url = `${environment.basePath}species/?page=${page}`;
     }
     return this.http.get<Response<Specie>>(url);
   };

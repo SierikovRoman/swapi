@@ -32,6 +32,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public characterList: Array<Character> = [];
   private lifeTimeObject: Subject<boolean> = new Subject<boolean>();
 
+  private charactersStore: Array<Character> = [];
+
   constructor(
     private store: Store<any>,
     private starWarService: StarWarsService
@@ -41,6 +43,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     .subscribe((state: any) => {
       if (state && state.isLoaded === true) {
         this.characterList = state.people;
+        this.charactersStore = state.people;
+      }
+    });
+    this.store.select('movies')
+    .pipe(takeUntil(this.lifeTimeObject))
+    .subscribe((state: any) => {
+      if (state && state.isLoaded === true) {
+        this.movieList = state.movies;
       }
     });
     this.store.select('species')
@@ -50,18 +60,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.specieList = state.species;
       }
     });
-  };
-
-  public onSpecie(specie: string) {
-    this.starWarService.getSpeciesList(specie)
-    .pipe(
-      takeUntil(this.lifeTimeObject)
-    )
-    .subscribe(
-      (res: Response<Specie>) => {
-        console.log(`Specie type ${specie}`, res.results);
-      }
-    )
   };
 
   ngAfterViewInit() {
@@ -94,11 +92,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         let characters: Array<string> = [];
         (res.results as Array<Movie>)
         .forEach((m: Movie, index: number) => {
-          let character = m.characters[index].replace(/http:\/\/swapi.dev\/api\/films\//g,'').replace('/', '');
-          characters.push(character);
+          m.characters.forEach((character_link: string) => {
+            let character_index = character_link.replace(/https:\/\/swapi.dev\/api\/people\//g,'').replace('/', '');
+            characters.push(character_index);
+          });
         });
         if (!!characters.length) {
-          //TODO update characterList
+          this.characterList = [];
+          this.characterList = characters.map((item: string) => {
+            return this.charactersStore[Number(item)];
+          });
         }
       }
     );
@@ -114,7 +117,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     )
     .subscribe(
       (res: Response<Specie>) => {
-        //TODO update characterList
+        let characters: Array<string> = [];
+        (res.results as Array<Specie>)
+        .forEach((m: Specie, index: number) => {
+          m.people.forEach((character_link: string) => {
+            let character_index = character_link.replace(/https:\/\/swapi.dev\/api\/people\//g,'').replace('/', '');
+            characters.push(character_index);
+          });
+        });
+        if (!!characters.length) {
+          this.characterList = characters.map((item: string) => {
+            return this.charactersStore[Number(item)];
+          });
+        }
       }
     );
   }

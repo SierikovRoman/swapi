@@ -1,9 +1,10 @@
 import { PeopleActionTypes } from '../actions/people.actions';
+import { Character } from 'src/app/models/Character.interface';
 
 export const peopleFeatureKey = 'people';
 
 export interface State {
-  people: Array<any> | [];
+  people: Array<Character> | [];
   isLoaded: boolean;
 }
 

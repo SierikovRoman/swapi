@@ -1,9 +1,10 @@
 import { SpaceshipsActionTypes } from '../actions/spaceships.action';
+import { Spaceship } from 'src/app/models/Spaceship.interface';
 
 export const spaceshipsFeatureKey = 'spaceships';
 
 export interface State {
-  spaceships: Array<any> | [];
+  spaceships: Array<Spaceship> | [];
   isLoaded: boolean;
 }
 

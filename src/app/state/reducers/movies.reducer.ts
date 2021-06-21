@@ -1,9 +1,10 @@
 import { MoviesActionTypes } from '../actions/movies.actions';
+import { Movie } from 'src/app/models/Movie.interface';
 
 export const moviesFeatureKey = 'movies';
 
 export interface State {
-  movies: Array<any> | [];
+  movies: Array<Movie> | [];
   isLoaded: boolean;
 }
 
